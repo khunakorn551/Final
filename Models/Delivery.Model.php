@@ -242,5 +242,17 @@ class DeliveryModel {
     return $stmt->fetchAll(PDO::FETCH_OBJ);
 }
 
+public function createUser($name, $email, $password, $role) {
+  try {
+      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+      // Status will default to 'offline'
+      $status = 'offline';
+      $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password, role, status) VALUES (?, ?, ?, ?, ?)");
+      return $stmt->execute([$name, $email, $hashedPassword, $role, $status]);
+  } catch (PDOException $e) {
+      return false;
+  }
+}
+
 }
 ?>
